@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- skill:chrome -->
+<style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Chrome UI (hover devices only): credit badge with idle-fade.
+    // Deferred until body exists since the script may run in <head>.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initChromeUI);
+    } else {
+        initChromeUI();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suncorp Customer Solutions | Cost of Invisible Work</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --suncorp-teal: #008577;
+  --suncorp-teal-dark: #004851;
+  --suncorp-teal-light: #e6f5f3;
+
+  --bg: #f4f9f8;
+  --surface: #fafdfd;
+  --text-primary: #1a2f2f;
+  --text-secondary: #3d5c5c;
+  --text-tertiary: #6b8a8a;
+  --border: #d4e5e3;
+
+  --drain-1: #C4820A;
+  --drain-2: #A65523;
+  --drain-3: #7B4B8A;
+  --drain-4: #8A7340;
+  --drain-5: #4A6A8A;
+
+  --cost-red: #B83A2A;
+  --cost-red-bg: #FDF0EE;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 48px 32px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 600px) {
+  body { padding: 24px 16px; }
+}
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.suncorp-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.suncorp-logo-text {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--suncorp-teal-dark);
+}
+
+.suncorp-sun {
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+
+.suncorp-sun-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,197,24,0.7) 40%, rgba(245,197,24,0) 70%);
+}
+
+.suncorp-sun-core {
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid rgba(245,197,24,0.4);
+}
+
+.clickup-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.clickup-logo-icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.clickup-wordmark {
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+header {
+  margin-bottom: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.header-text h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  color: var(--suncorp-teal-dark);
+}
+
+.header-text p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-width: 58ch;
+}
+
+.view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.toggle-btn {
+  padding: 10px 18px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-family: inherit;
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.toggle-btn.active {
+  background: var(--suncorp-teal);
+  color: white;
+}
+
+.toggle-btn:hover:not(.active) {
+  background: var(--suncorp-teal-light);
+  color: var(--suncorp-teal-dark);
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Desktop only: sticky bar */
+@media (min-width: 901px) {
+  .bar-wrapper {
+    position: sticky;
+    top: 48px;
+  }
+}
+
+/* Mobile / tablet layout */
+@media (max-width: 900px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .bar-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .top-bar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-text h1 {
+    font-size: 1.5rem;
+  }
+  .bar-body {
+    height: 320px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-grid { gap: 24px; }
+  .header-text h1 { font-size: 1.35rem; }
+  .header-text p { font-size: 0.9rem; }
+  .bar-body { height: 280px !important; }
+  .cost-sliders { grid-template-columns: 1fr !important; }
+}
+
+.bar-wrapper {
+  z-index: 1;
+}
+
+.bar-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.bar-container {
+  position: relative;
+  width: 170px;
+  margin: 0 auto;
+}
+
+.bar-body {
+  width: 170px;
+  height: 440px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  background: #e8f0ef;
+  box-shadow: inset 0 2px 8px rgba(0,69,81,0.06);
+}
+
+.bar-segment {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.segment-inner-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  pointer-events: none;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.target-line {
+  position: absolute;
+  left: -14px;
+  right: -14px;
+  height: 0;
+  border-top: 2px dashed var(--suncorp-teal);
+  z-index: 10;
+  pointer-events: none;
+  transition: bottom 0.3s var(--ease-out-expo);
+}
+
+.target-tag {
+  position: absolute;
+  right: calc(100% + 5px);
+  top: -9px;
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: var(--suncorp-teal);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.target-pct {
+  position: absolute;
+  left: calc(100% + 5px);
+  top: -9px;
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: var(--suncorp-teal);
+}
+
+.gap-bracket {
+  position: absolute;
+  right: -28px;
+  border-right: 2px solid var(--cost-red);
+  border-top: 2px solid var(--cost-red);
+  border-bottom: 2px solid var(--cost-red);
+  width: 10px;
+  z-index: 10;
+  pointer-events: none;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.gap-label {
+  position: absolute;
+  right: -62px;
+  font-size: 0.56rem;
+  font-weight: 800;
+  color: var(--cost-red);
+  white-space: nowrap;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.utilization-bar {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.util-label {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.util-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s var(--ease-out-expo);
+}
+
+.util-sub {
+  font-size: 0.66rem;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.details-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.customer-time-card {
+  padding: 18px 22px;
+  background: var(--suncorp-teal-light);
+  border: 1px solid #b8ddd8;
+  border-radius: 14px;
+}
+
+.customer-time-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.customer-time-header .cat-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--suncorp-teal);
+  flex-shrink: 0;
+}
+
+.customer-time-header .cat-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  flex: 1;
+  color: var(--suncorp-teal-dark);
+}
+
+.customer-time-header .cat-time {
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--suncorp-teal-dark);
+}
+
+.customer-time-note {
+  font-size: 0.73rem;
+  color: #3d6b66;
+  margin-top: 6px;
+  padding-left: 20px;
+  line-height: 1.5;
+}
+
+.category-slider {
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: border-color 0.2s var(--ease-out-expo), box-shadow 0.2s var(--ease-out-expo);
+}
+
+.category-slider:hover {
+  border-color: #a8cec9;
+  box-shadow: 0 2px 8px rgba(0,69,81,0.04);
+}
+
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+
+.cat-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.cat-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  flex: 1;
+}
+
+.cat-time {
+  font-size: 0.84rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  min-width: 90px;
+  text-align: right;
+}
+
+.cat-time .pct {
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+
+.cat-desc {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  margin: 4px 0 12px 20px;
+  line-height: 1.5;
+}
+
+.cat-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 20px;
+}
+
+.cat-range span {
+  font-size: 0.64rem;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-weight: 600;
+}
+
+.cat-range span:last-child {
+  text-align: right;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #dce9e7;
+  outline: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--suncorp-teal-dark);
+  border: 3px solid var(--surface);
+  box-shadow: 0 1px 4px rgba(0,72,81,0.25);
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--suncorp-teal-dark);
+  border: 3px solid var(--surface);
+  box-shadow: 0 1px 4px rgba(0,72,81,0.25);
+  cursor: pointer;
+}
+
+.section-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 0;
+}
+
+.cost-section {
+  padding: 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.cost-section h3 {
+  font-size: 0.88rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--suncorp-teal-dark);
+}
+
+.cost-sliders {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 780px) {
+  .cost-sliders { grid-template-columns: 1fr; }
+}
+
+.cost-slider-group label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.cost-slider-group label span {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.cost-slider-group label strong {
+  font-size: 0.86rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-breakdown {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 14px 18px;
+  background: var(--suncorp-teal-light);
+  border-radius: 10px;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.cost-breakdown .actual-val,
+.cost-breakdown .target-val,
+.cost-breakdown .gap-val {
+  text-align: center;
+}
+
+.cost-breakdown .actual-val strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--cost-red);
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-breakdown .target-val strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--suncorp-teal);
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-breakdown .gap-val {
+  padding: 8px 10px;
+  background: var(--cost-red-bg);
+  border-radius: 8px;
+}
+
+.cost-breakdown .gap-val strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--cost-red);
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-formula {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-bottom: 14px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.cost-result {
+  padding: 18px 22px;
+  background: var(--cost-red-bg);
+  border-radius: 12px;
+  border: 1px solid #f0d4d0;
+}
+
+.cost-result-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cost-red);
+  margin-bottom: 5px;
+}
+
+.cost-result-number {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--cost-red);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.cost-result-context {
+  font-size: 0.74rem;
+  color: #6b3a34;
+  margin-top: 5px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.footer-note {
+  margin-top: 12px;
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+  max-width: 52ch;
+  font-weight: 500;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <div class="suncorp-logo">
+      <span class="suncorp-logo-text">SUNCORP</span>
+      <div class="suncorp-sun">
+        <div class="suncorp-sun-glow"></div>
+        <div class="suncorp-sun-core"></div>
+      </div>
+    </div>
+    <div class="clickup-mark">
+      <span>Prepared with</span>
+      <div class="clickup-logo-icon">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 8L12 16L15 19L20 14L25 19L28 16L20 8Z" fill="url(#cg1)"/>
+          <path d="M12 24C12 24 15 29 20 29C25 29 28 24 28 24L25 21.5C25 21.5 23 25 20 25C17 25 15 21.5 15 21.5L12 24Z" fill="url(#sg1)"/>
+          <defs>
+            <linearGradient id="cg1" x1="12" y1="16" x2="28" y2="8">
+              <stop offset="0%" stop-color="#FF02F0"/>
+              <stop offset="100%" stop-color="#FFC800"/>
+            </linearGradient>
+            <linearGradient id="sg1" x1="12" y1="24" x2="28" y2="29">
+              <stop offset="0%" stop-color="#8930FD"/>
+              <stop offset="100%" stop-color="#49CCF9"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="clickup-wordmark">ClickUp</span>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-text">
+      <h1>Where Does Your Team's Day Actually Go?</h1>
+      <p>Each Customer Solutions employee has 8 hours. Drag the sliders to model how time is consumed. The cost represents the gap between where you are and where you should be.</p>
+    </div>
+    <div class="view-toggle">
+      <button class="toggle-btn active" id="toggleDay">Day</button>
+      <button class="toggle-btn" id="toggleWeek">Week</button>
+    </div>
+  </header>
+
+  <div class="main-grid">
+    <div class="bar-wrapper">
+      <div class="bar-label" id="barLabel">One Employee's Day</div>
+      <div class="bar-container">
+        <div class="bar-body" id="barBody">
+          <div class="target-line" id="targetLine">
+            <span class="target-tag">TARGET</span>
+            <span class="target-pct" id="targetPctLabel">75%</span>
+          </div>
+          <div class="gap-bracket" id="gapBracket">
+            <span class="gap-label" id="gapLabel">30pt gap</span>
+          </div>
+        </div>
+      </div>
+      <div class="utilization-bar">
+        <div class="util-label">Customer-facing time</div>
+        <div class="util-number" id="utilNumber">45%</div>
+        <div class="util-sub" id="utilSub">Target: 75%</div>
+      </div>
+    </div>
+
+    <div class="details-panel">
+      <div class="customer-time-card">
+        <div class="customer-time-header">
+          <div class="cat-dot"></div>
+          <div class="cat-name">Customer-facing time</div>
+          <div class="cat-time" id="customerTime">3h 36m <span class="pct">(45%)</span></div>
+        </div>
+        <div class="customer-time-note">What's left after everything else. This is the time that actually generates value for customers.</div>
+      </div>
+
+      <div id="categorySliders"></div>
+
+      <div class="section-divider"></div>
+
+      <div class="cost-section">
+        <h3>The Cost of the Gap</h3>
+        <div class="cost-sliders">
+          <div class="cost-slider-group">
+            <label>
+              <span>Team size</span>
+              <strong id="teamSizeVal">40</strong>
+            </label>
+            <input type="range" id="teamSize" min="15" max="70" value="40" step="1">
+          </div>
+          <div class="cost-slider-group">
+            <label>
+              <span>Cost/FTE (AUD)</span>
+              <strong id="costVal">$95,000</strong>
+            </label>
+            <input type="range" id="costFTE" min="60000" max="120000" value="95000" step="5000">
+          </div>
+          <div class="cost-slider-group">
+            <label>
+              <span>Target off-phone</span>
+              <strong id="targetVal">25%</strong>
+            </label>
+            <input type="range" id="targetShrinkage" min="10" max="40" value="25" step="5">
+          </div>
+        </div>
+
+        <div class="cost-breakdown">
+          <div class="actual-val">
+            <span>Actual off-phone</span>
+            <strong id="actualPct">55%</strong>
+          </div>
+          <div class="gap-val">
+            <span>The gap</span>
+            <strong id="gapPct">30pts</strong>
+          </div>
+          <div class="target-val">
+            <span>Target off-phone</span>
+            <strong id="targetPct2">25%</strong>
+          </div>
+        </div>
+
+        <div class="cost-formula" id="costFormula">40 people x $95,000 x 30% excess = cost of work that shouldn't be there</div>
+
+        <div class="cost-result">
+          <div class="cost-result-label">Annual Cost of Excess Invisible Work</div>
+          <div class="cost-result-number" id="totalCost">$1,140,000</div>
+          <div class="cost-result-context" id="costContext">The dollar value of time consumed by work that shouldn't land on your team, or shouldn't take as long as it does.</div>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        Based on discovery with Suncorp Customer Solutions leadership. Figures are illustrative estimates. Adjust sliders to model your team's reality.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var DAY_MINUTES = 480;
+  var WEEK_MINUTES = 2400;
+  var BAR_HEIGHT = 440;
+
+  var currentView = 'day';
+  var multiplier = 1;
+
+  var drains = [
+    { id: 'email', name: 'Email inbox (untracked)', minutesPerDay: 72, min: 0, maxPerDay: 180, color: '#C4820A', desc: '800+ items in Outlook with no handle-time data or workflow status' },
+    { id: 'referrals', name: 'Internal referrals', minutesPerDay: 48, min: 0, maxPerDay: 180, color: '#A65523', desc: 'Cross-team requests routed by email with zero tracking' },
+    { id: 'knowledge', name: 'Knowledge reviews', minutesPerDay: 40, min: 0, maxPerDay: 180, color: '#7B4B8A', desc: '830+ articles/yr at 10-20 min each; errors cascade downstream' },
+    { id: 'adhoc', name: 'Ad-hoc SME requests', minutesPerDay: 56, min: 0, maxPerDay: 180, color: '#8A7340', desc: 'Unstructured expert work that absorbs capacity invisibly' },
+    { id: 'admin', name: 'Manual logging & admin', minutesPerDay: 48, min: 0, maxPerDay: 180, color: '#4A6A8A', desc: 'PowerApp, Excel rollups, Variant entry: time spent tracking time' }
+  ];
+
+  function getBarHeight() {
+    var barEl = document.getElementById('barBody');
+    return barEl ? barEl.offsetHeight : BAR_HEIGHT;
+  }
+
+  function formatTime(m) {
+    var h = Math.floor(m / 60);
+    var mins = Math.round(m % 60);
+    if (h === 0) return mins + ' min';
+    if (mins === 0) return h + 'h';
+    return h + 'h ' + mins + 'm';
+  }
+
+  function formatTimeWithPct(m, pool) {
+    var pct = Math.round((m / pool) * 100);
+    return formatTime(m) + ' <span class="pct">(' + pct + '%)</span>';
+  }
+
+  function getTotalPool() {
+    return currentView === 'day' ? DAY_MINUTES : WEEK_MINUTES;
+  }
+
+  function getTotalDrain() {
+    var sum = 0;
+    for (var i = 0; i < drains.length; i++) {
+      sum += drains[i].minutesPerDay * multiplier;
+    }
+    return sum;
+  }
+
+  function getCustomerMinutes() {
+    return Math.max(0, getTotalPool() - getTotalDrain());
+  }
+
+  function getMaxAllowedFor(drainId) {
+    var othersTotal = 0;
+    for (var i = 0; i < drains.length; i++) {
+      if (drains[i].id !== drainId) {
+        othersTotal += drains[i].minutesPerDay * multiplier;
+      }
+    }
+    return getTotalPool() - othersTotal;
+  }
+
+  function setView(view) {
+    currentView = view;
+    multiplier = view === 'day' ? 1 : 5;
+
+    document.getElementById('toggleDay').classList.toggle('active', view === 'day');
+    document.getElementById('toggleWeek').classList.toggle('active', view === 'week');
+    document.getElementById('barLabel').textContent = view === 'day' ? "One Employee's Day" : "One Employee's Week";
+
+    buildSliders();
+    update();
+  }
+
+  function buildSliders() {
+    var container = document.getElementById('categorySliders');
+    container.innerHTML = '';
+
+    for (var i = 0; i < drains.length; i++) {
+      var drain = drains[i];
+      var currentVal = drain.minutesPerDay * multiplier;
+      var maxVal = drain.maxPerDay * multiplier;
+      var pool = getTotalPool();
+      var div = document.createElement('div');
+      div.className = 'category-slider';
+      div.innerHTML =
+        '<div class="cat-header">' +
+          '<div class="cat-dot" style="background: ' + drain.color + '"></div>' +
+          '<div class="cat-name">' + drain.name + '</div>' +
+          '<div class="cat-time" id="time-' + drain.id + '">' + formatTimeWithPct(currentVal, pool) + '</div>' +
+        '</div>' +
+        '<div class="cat-desc">' + drain.desc + '</div>' +
+        '<div class="cat-range">' +
+          '<span>0</span>' +
+          '<input type="range" id="slider-' + drain.id + '" min="0" max="' + maxVal + '" value="' + currentVal + '" step="' + (multiplier * 5) + '">' +
+          '<span id="max-label-' + drain.id + '">' + formatTime(maxVal) + '</span>' +
+        '</div>';
+      container.appendChild(div);
+    }
+
+    for (var j = 0; j < drains.length; j++) {
+      (function(drain) {
+        var slider = document.getElementById('slider-' + drain.id);
+        slider.addEventListener('input', function(e) {
+          var desired = parseInt(e.target.value);
+          var maxAllowed = getMaxAllowedFor(drain.id);
+          if (desired > maxAllowed) {
+            desired = Math.max(0, maxAllowed);
+            slider.value = desired;
+          }
+          drain.minutesPerDay = desired / multiplier;
+          update();
+        });
+      })(drains[j]);
+    }
+  }
+
+  function update() {
+    var pool = getTotalPool();
+
+    for (var i = 0; i < drains.length; i++) {
+      var drain = drains[i];
+      var val = drain.minutesPerDay * multiplier;
+      document.getElementById('time-' + drain.id).innerHTML = formatTimeWithPct(val, pool);
+    }
+
+    for (var j = 0; j < drains.length; j++) {
+      var d = drains[j];
+      var slider = document.getElementById('slider-' + d.id);
+      var maxAllowed = getMaxAllowedFor(d.id);
+      var nominalMax = d.maxPerDay * multiplier;
+      var effectiveMax = Math.min(nominalMax, maxAllowed);
+      slider.max = effectiveMax;
+      var currentVal = d.minutesPerDay * multiplier;
+      if (currentVal > effectiveMax) {
+        d.minutesPerDay = effectiveMax / multiplier;
+        slider.value = effectiveMax;
+        document.getElementById('time-' + d.id).innerHTML = formatTimeWithPct(effectiveMax, pool);
+      }
+      document.getElementById('max-label-' + d.id).textContent = formatTime(effectiveMax);
+    }
+
+    var customerMin = getCustomerMinutes();
+    document.getElementById('customerTime').innerHTML = formatTimeWithPct(customerMin, pool);
+
+    var customerPct = Math.round((customerMin / pool) * 100);
+    var utilEl = document.getElementById('utilNumber');
+    utilEl.textContent = customerPct + '%';
+    if (customerPct >= 70) utilEl.style.color = '#006B60';
+    else if (customerPct >= 50) utilEl.style.color = '#8A7340';
+    else utilEl.style.color = '#B83A2A';
+
+    var targetShrinkage = parseInt(document.getElementById('targetShrinkage').value);
+    var targetCustomer = 100 - targetShrinkage;
+    document.getElementById('utilSub').textContent = 'Target: ' + targetCustomer + '%';
+
+    renderBar();
+    updateCost();
+  }
+
+  function renderBar() {
+    var body = document.getElementById('barBody');
+    var pool = getTotalPool();
+    var barHeight = getBarHeight();
+    var segments = body.querySelectorAll('.bar-segment');
+    for (var s = 0; s < segments.length; s++) {
+      segments[s].parentNode.removeChild(segments[s]);
+    }
+
+    var customerMin = getCustomerMinutes();
+    var currentBottom = 0;
+
+    // Customer segment
+    var custHeight = (customerMin / pool) * barHeight;
+    var custPct = Math.round((customerMin / pool) * 100);
+    if (custHeight > 0) {
+      var el = document.createElement('div');
+      el.className = 'bar-segment';
+      el.style.bottom = '0px';
+      el.style.height = custHeight + 'px';
+      el.style.background = '#008577';
+      el.style.borderRadius = '0 0 16px 16px';
+      if (custHeight > 36) {
+        var label = document.createElement('div');
+        label.className = 'segment-inner-label';
+        label.textContent = formatTime(Math.round(customerMin)) + ' (' + custPct + '%)';
+        el.appendChild(label);
+      } else if (custHeight > 20) {
+        var label2 = document.createElement('div');
+        label2.className = 'segment-inner-label';
+        label2.textContent = custPct + '%';
+        el.appendChild(label2);
+      }
+      body.appendChild(el);
+      currentBottom = custHeight;
+    }
+
+    // Drain segments
+    for (var i = 0; i < drains.length; i++) {
+      var drain = drains[i];
+      var val = drain.minutesPerDay * multiplier;
+      var height = (val / pool) * barHeight;
+      if (height < 1) continue;
+
+      var pct = Math.round((val / pool) * 100);
+
+      var segEl = document.createElement('div');
+      segEl.className = 'bar-segment';
+      segEl.style.bottom = currentBottom + 'px';
+      segEl.style.height = height + 'px';
+      segEl.style.background = drain.color;
+
+      var isLast = true;
+      for (var k = i + 1; k < drains.length; k++) {
+        if (drains[k].minutesPerDay > 0) { isLast = false; break; }
+      }
+      if (isLast) segEl.style.borderRadius = '16px 16px 0 0';
+
+      if (height > 36) {
+        var segLabel = document.createElement('div');
+        segLabel.className = 'segment-inner-label';
+        segLabel.textContent = formatTime(Math.round(val)) + ' (' + pct + '%)';
+        segEl.appendChild(segLabel);
+      } else if (height > 20) {
+        var segLabel2 = document.createElement('div');
+        segLabel2.className = 'segment-inner-label';
+        segLabel2.textContent = pct + '%';
+        segEl.appendChild(segLabel2);
+      }
+
+      body.appendChild(segEl);
+      currentBottom += height;
+    }
+
+    // Target line
+    var targetShrinkage = parseInt(document.getElementById('targetShrinkage').value) / 100;
+    var targetCustomerPct = 1 - targetShrinkage;
+    var targetBottom = targetCustomerPct * barHeight;
+    document.getElementById('targetLine').style.bottom = targetBottom + 'px';
+    document.getElementById('targetPctLabel').textContent = Math.round(targetCustomerPct * 100) + '%';
+
+    // Gap bracket
+    var actualCustomerPct = customerMin / pool;
+    var actualBottom = actualCustomerPct * barHeight;
+    var gapPx = targetBottom - actualBottom;
+    var bracket = document.getElementById('gapBracket');
+    var gapLabelEl = document.getElementById('gapLabel');
+
+    if (gapPx > 10) {
+      bracket.style.display = 'block';
+      bracket.style.bottom = actualBottom + 'px';
+      bracket.style.height = gapPx + 'px';
+      var gapPts = Math.round((targetCustomerPct - actualCustomerPct) * 100);
+      gapLabelEl.textContent = gapPts + 'pt gap';
+    } else {
+      bracket.style.display = 'none';
+    }
+  }
+
+  function updateCost() {
+    var teamSize = parseInt(document.getElementById('teamSize').value);
+    var costPerFTE = parseInt(document.getElementById('costFTE').value);
+    var targetShrinkage = parseInt(document.getElementById('targetShrinkage').value) / 100;
+
+    document.getElementById('teamSizeVal').textContent = teamSize;
+    document.getElementById('costVal').textContent = '$' + costPerFTE.toLocaleString();
+    document.getElementById('targetVal').textContent = Math.round(targetShrinkage * 100) + '%';
+
+    var actualShrinkageSum = 0;
+    for (var i = 0; i < drains.length; i++) {
+      actualShrinkageSum += drains[i].minutesPerDay;
+    }
+    var actualShrinkage = actualShrinkageSum / DAY_MINUTES;
+    var gap = Math.max(0, actualShrinkage - targetShrinkage);
+
+    document.getElementById('actualPct').textContent = Math.round(actualShrinkage * 100) + '%';
+    document.getElementById('targetPct2').textContent = Math.round(targetShrinkage * 100) + '%';
+    document.getElementById('gapPct').textContent = Math.round(gap * 100) + 'pts';
+
+    var totalCost = Math.round(teamSize * costPerFTE * gap);
+    var fteEquiv = (teamSize * gap).toFixed(1);
+
+    document.getElementById('costFormula').textContent = teamSize + ' people x $' + costPerFTE.toLocaleString() + ' x ' + Math.round(gap * 100) + '% excess off-phone time';
+    document.getElementById('totalCost').textContent = '$' + totalCost.toLocaleString();
+    document.getElementById('costContext').textContent = 'Equivalent to ~' + Math.round(fteEquiv) + ' FTEs\' worth of time consumed by work that shouldn\'t land on your team, or shouldn\'t take as long as it does.';
+  }
+
+  // Event listeners
+  document.getElementById('toggleDay').addEventListener('click', function() { setView('day'); });
+  document.getElementById('toggleWeek').addEventListener('click', function() { setView('week'); });
+  document.getElementById('teamSize').addEventListener('input', function() { update(); });
+  document.getElementById('costFTE').addEventListener('input', function() { update(); });
+  document.getElementById('targetShrinkage').addEventListener('input', function() { update(); });
+
+  // Initialize
+  buildSliders();
+  update();
+
+  // Re-render on resize (bar height changes on mobile)
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() { renderBar(); }, 150);
+  });
+})();
+</script>
+</body>
+</html>
